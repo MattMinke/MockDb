@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using Moq.Protected;
 
 namespace MockDb
 {
@@ -50,9 +51,29 @@ namespace MockDb
                    state = ConnectionState.Open;
                    return Task.CompletedTask;
                });
+            mockConnection.Setup(o => o.Close())
+               .Callback(() =>
+               {
+                   state = ConnectionState.Closed;
+               });
+            mockConnection.Setup(o => o.CloseAsync())
+                .Returns(() =>
+                {
+                    state = ConnectionState.Closed;
+                    return Task.CompletedTask;
+                });
+
+            mockConnection.Protected().Setup("Dispose", ItExpr.IsAny<bool>())
+                .Callback(() =>
+                {
+                    mockConnection.Object.Close();
+                });
+
+            mockConnection.SetupProperty(o => o.ConnectionString, null);
 
             return mockConnection.Object;
         }
 
+      
     }
 }

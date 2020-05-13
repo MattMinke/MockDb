@@ -29,6 +29,27 @@ namespace MockDb.Tests
             Assert.That(connection.State, Is.EqualTo(ConnectionState.Open));
 
         }
+
+        [Test]
+        public void Connection_OpenThenClose_Succeeds()
+        {
+            // Arrange
+            // =================
+            var target = new MockDatabase();
+            var connection = target.CreateConnection();
+
+            // Act
+            // =================
+
+            connection.Open();
+            connection.Close();
+
+            // Assert
+            // =================
+            Assert.That(connection.State, Is.EqualTo(ConnectionState.Closed));
+
+        }
+
         [Test]
         public async Task Connection_OpenAsync_Succeeds()
         {
@@ -47,8 +68,28 @@ namespace MockDb.Tests
             Assert.That(connection.State, Is.EqualTo(ConnectionState.Open));
         }
 
+
         [Test]
-        public async Task Connection_OpenAsync_CancellationRequested()
+        public async Task Connection_OpenAsyncThenCloseAsync_Succeeds()
+        {
+            // Arrange
+            // =================
+            var target = new MockDatabase();
+            var connection = target.CreateConnection();
+
+            // Act
+            // =================
+
+            await connection.OpenAsync();
+            await connection.CloseAsync();
+
+            // Assert
+            // =================
+            Assert.That(connection.State, Is.EqualTo(ConnectionState.Closed));
+        }
+
+        [Test]
+        public void Connection_OpenAsync_CancellationRequested()
         {
             // Arrange
             // =================
