@@ -1,7 +1,10 @@
 ﻿using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MockDb.Tests
 {
+    [ExcludeFromCodeCoverage]
+    [TestFixture]
     public class MockDatabaseTests
     {
         [Test]
