@@ -110,7 +110,7 @@ namespace MockDb.Tests
 
             // Assert
             // =================
-            Assert.ThrowsAsync<OperationCanceledException>(action);
+            Assert.ThrowsAsync<TaskCanceledException>(action);
             Assert.That(connection.State, Is.EqualTo(ConnectionState.Closed));
         }
 
